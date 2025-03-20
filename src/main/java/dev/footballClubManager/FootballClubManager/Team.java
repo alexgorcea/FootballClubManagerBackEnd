@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Team {
 
     @Id
+    private String objectId;
+
     private String id;
 
     private String name;
@@ -24,10 +26,12 @@ public class Team {
     private int currentMarketValue;
 
     private Squad squad;
-}
 
-class Squad {
-    private int size;
-    private int averageAge;
-
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Squad {
+        private int size;
+        private int averageAge;
+    }
 }
