@@ -25,6 +25,8 @@ public class Team {
 
     private int currentMarketValue;
 
+    private String president;
+
     private Squad squad;
 
     @Data
