@@ -16,7 +16,7 @@ public class TeamService{
         return teamRepository.findAll();
     }
 
-    public Optional<Team> getTeamById(String id){
+    public Optional<Team> singleTeam(String id){
         return teamRepository.findTeamById(id);
     }
 
