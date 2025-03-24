@@ -1,4 +1,4 @@
-package dev.footballClubManager.FootballClubManager;
+package dev.footballClubManager.FootballClubManager.Players;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

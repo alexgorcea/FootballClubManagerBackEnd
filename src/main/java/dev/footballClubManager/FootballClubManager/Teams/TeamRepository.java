@@ -1,4 +1,4 @@
-package dev.footballClubManager.FootballClubManager;
+package dev.footballClubManager.FootballClubManager.Teams;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.annotation.Id;

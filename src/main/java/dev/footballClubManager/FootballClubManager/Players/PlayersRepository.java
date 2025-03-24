@@ -1,10 +1,9 @@
-package dev.footballClubManager.FootballClubManager;
+package dev.footballClubManager.FootballClubManager.Players;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
