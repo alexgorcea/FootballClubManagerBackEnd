@@ -3,6 +3,7 @@ package dev.footballClubManager.FootballClubManager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Player {
 
-    private String id;
+    @Field("id")
+    private String playerId;
 
     private String name;
 
@@ -27,6 +29,7 @@ public class Player {
 
     private String foot;
 
-    private int marketValue;
+    private double marketValue;
 
 }
+

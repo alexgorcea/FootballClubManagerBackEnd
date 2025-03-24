@@ -23,7 +23,7 @@ public class Team {
 
     private String stadiumName;
 
-    private int currentMarketValue;
+    private double currentMarketValue;
 
     private String president;
 
