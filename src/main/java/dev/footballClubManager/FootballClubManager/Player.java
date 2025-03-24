@@ -31,5 +31,7 @@ public class Player {
 
     private double marketValue;
 
+    private String status;
+
 }
 

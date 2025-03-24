@@ -26,5 +26,7 @@ public class PlayersController {
     @GetMapping("/{teamId}")
     public ResponseEntity<List<Player>> getTeamPlayers(@PathVariable String teamId){
         return new ResponseEntity<>(playersService.getPlayersByTeamId(teamId), HttpStatus.OK);
+
+
     }
 }

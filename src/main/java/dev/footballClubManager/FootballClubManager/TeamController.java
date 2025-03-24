@@ -20,11 +20,11 @@ public class TeamController {
 
     @GetMapping
     public ResponseEntity<List<Team>> getAllTeams(){
-        return new ResponseEntity<List<Team>>(teamService.allTeams(), HttpStatus.OK);
+        return new ResponseEntity<>(teamService.allTeams(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Team>> getTeam(@PathVariable String id){
-        return new ResponseEntity<Optional<Team>>(teamService.singleTeam(id), HttpStatus.OK);
+        return new ResponseEntity<>(teamService.singleTeam(id), HttpStatus.OK);
     }
 }
