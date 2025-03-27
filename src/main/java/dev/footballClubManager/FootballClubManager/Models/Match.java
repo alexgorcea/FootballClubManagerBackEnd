@@ -17,8 +17,6 @@ import java.util.Date;
 public class Match {
 
     @Id
-    private ObjectId objectId;
-
     private String matchId;
 
     private String homeTeamId;
@@ -31,6 +29,6 @@ public class Match {
 
     private int ticketPrice;
 
-    private Review review;
+    private String reviewId;
 
 }
