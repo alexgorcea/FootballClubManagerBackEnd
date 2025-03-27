@@ -1,6 +1,8 @@
-package dev.footballClubManager.FootballClubManager.Matches;
+package dev.footballClubManager.FootballClubManager.Controllers;
 
 
+import dev.footballClubManager.FootballClubManager.Services.MatchService;
+import dev.footballClubManager.FootballClubManager.Models.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

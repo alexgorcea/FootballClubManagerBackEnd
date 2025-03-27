@@ -1,6 +1,6 @@
-package dev.footballClubManager.FootballClubManager.MarketValues;
+package dev.footballClubManager.FootballClubManager.Services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import dev.footballClubManager.FootballClubManager.Models.MarketValue.PlayerMarketValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

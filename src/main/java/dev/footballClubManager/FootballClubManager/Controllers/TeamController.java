@@ -1,5 +1,7 @@
-package dev.footballClubManager.FootballClubManager.Teams;
+package dev.footballClubManager.FootballClubManager.Controllers;
 
+import dev.footballClubManager.FootballClubManager.Models.Team;
+import dev.footballClubManager.FootballClubManager.Services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

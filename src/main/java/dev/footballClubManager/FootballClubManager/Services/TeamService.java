@@ -1,5 +1,7 @@
-package dev.footballClubManager.FootballClubManager.Teams;
+package dev.footballClubManager.FootballClubManager.Services;
 
+import dev.footballClubManager.FootballClubManager.Models.Team;
+import dev.footballClubManager.FootballClubManager.Repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

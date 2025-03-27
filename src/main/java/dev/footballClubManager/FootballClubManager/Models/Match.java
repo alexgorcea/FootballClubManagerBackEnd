@@ -1,7 +1,6 @@
-package dev.footballClubManager.FootballClubManager.Matches;
+package dev.footballClubManager.FootballClubManager.Models;
 
 
-import dev.footballClubManager.FootballClubManager.Reviews.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

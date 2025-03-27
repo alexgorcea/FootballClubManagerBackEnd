@@ -1,5 +1,6 @@
-package dev.footballClubManager.FootballClubManager.Teams;
+package dev.footballClubManager.FootballClubManager.Repositories;
 
+import dev.footballClubManager.FootballClubManager.Models.Team;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

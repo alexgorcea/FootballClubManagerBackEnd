@@ -1,4 +1,4 @@
-package dev.footballClubManager.FootballClubManager.MarketValues;
+package dev.footballClubManager.FootballClubManager.Models.MarketValue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

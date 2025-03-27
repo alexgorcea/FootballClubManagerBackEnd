@@ -1,10 +1,10 @@
-package dev.footballClubManager.FootballClubManager.Matches;
+package dev.footballClubManager.FootballClubManager.Services;
 
+import dev.footballClubManager.FootballClubManager.Models.Match;
+import dev.footballClubManager.FootballClubManager.Repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
