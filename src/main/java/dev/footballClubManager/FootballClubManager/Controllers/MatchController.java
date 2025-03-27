@@ -33,6 +33,11 @@ public class MatchController {
         return new ResponseEntity<>(matchService.createMatch(match),HttpStatus.OK);
     }
 
+    @PostMapping("/edit/{matchId}")
+    public ResponseEntity<Match> editMatch(@RequestBody Match updatedMatch, @PathVariable String matchId){
+        return new ResponseEntity<>(matchService.updateMatch(updatedMatch,matchId),HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{matchId}")
     public ResponseEntity<String> deleteMatch(@PathVariable String matchId){
         matchService.removeMatch(matchId);

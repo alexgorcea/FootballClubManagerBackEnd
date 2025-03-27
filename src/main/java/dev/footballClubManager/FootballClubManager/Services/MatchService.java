@@ -26,6 +26,16 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
+    public Match updateMatch(Match updatedMatch,String matchId){
+
+        String reviewId = matchRepository.findByMatchId(matchId).get().getReviewId();
+
+        updatedMatch.setReviewId(reviewId);
+        updatedMatch.setMatchId(matchId);
+
+        return matchRepository.save(updatedMatch);
+    }
+
     public void removeMatch(String matchId){
         matchRepository.deleteByMatchId(matchId);
     }
