@@ -3,7 +3,6 @@ package dev.footballClubManager.FootballClubManager.Services;
 import dev.footballClubManager.FootballClubManager.Models.Match;
 import dev.footballClubManager.FootballClubManager.Models.Review;
 import dev.footballClubManager.FootballClubManager.Repositories.MatchRepository;
-import dev.footballClubManager.FootballClubManager.Repositories.ReviewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
