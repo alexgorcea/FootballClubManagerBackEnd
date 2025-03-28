@@ -20,7 +20,7 @@ public class Review {
 
     private int awayTeamScore;
 
-    private int winnerTeamId;
+    private String winnerTeamId;
 
     private double spectators;
 }

@@ -6,6 +6,7 @@ import dev.footballClubManager.FootballClubManager.Repositories.ReviewsRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,11 @@ public class ReviewService {
     }
 
     public Review createReview(Review review, String matchId){
+        String winnerTeam = calculateWinningTeam(review, matchId);
+        review.setWinnerTeamId(winnerTeam);
+
         Review savedReview = reviewsRepository.save(review);
+
         mongoTemplate.update(Match.class)
                 .matching(Criteria.where("matchId").is(matchId))
                 .apply(new Update().set("reviewId", review.getReviewId()))
@@ -42,11 +47,30 @@ public class ReviewService {
 
     public Review updateReview(Review updatedReview, String reviewId){
         updatedReview.setReviewId(reviewId);
+
+        Query query = new Query(Criteria.where("reviewId").is(reviewId));
+        String matchId = mongoTemplate.findOne(query,Match.class).getMatchId();
+
+        updatedReview.setWinnerTeamId(calculateWinningTeam(updatedReview, matchId));
+
         return reviewsRepository.save(updatedReview);
     }
 
     public void removeReview(String reviewId){
         reviewsRepository.deleteByReviewId(reviewId);
+    }
+
+    private String calculateWinningTeam(Review review, String matchId){
+        String awayTeamId = mongoTemplate.findById(matchId, Match.class).getAwayTeamId();
+        String homeTeamId = mongoTemplate.findById(matchId, Match.class).getHomeTeamId();
+
+        if(review.getHomeTeamScore() > review.getAwayTeamScore()){
+            return homeTeamId;
+        } else if (review.getAwayTeamScore() > review.getHomeTeamScore()) {
+            return awayTeamId;
+        }
+
+        return "Draw";
     }
 
 }
