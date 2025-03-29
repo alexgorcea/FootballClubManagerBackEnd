@@ -29,8 +29,6 @@ public class Player {
 
     private String foot;
 
-    private String status;
-
     private String imageUrl;
 
 
