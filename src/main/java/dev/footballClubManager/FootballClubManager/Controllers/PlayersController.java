@@ -18,13 +18,13 @@ public class PlayersController {
     private PlayersService playersService;
 
     @GetMapping
-    public ResponseEntity<List<TeamPlayers>> getAllPlayers() {
+    public ResponseEntity<List<Player>> getAllPlayers() {
         return new ResponseEntity<>(playersService.findAllPlayers(), HttpStatus.OK);
     }
 
     @GetMapping("/{teamId}")
     public ResponseEntity<List<Player>> getTeamPlayers(@PathVariable String teamId){
-        return new ResponseEntity<>(playersService.getPlayersByTeamId(teamId), HttpStatus.OK);
+        return new ResponseEntity<>(playersService.findPlayersByTeamId(teamId), HttpStatus.OK);
 
     }
 }
