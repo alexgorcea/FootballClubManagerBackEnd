@@ -23,4 +23,6 @@ public class Review {
     private String winnerTeamId;
 
     private double spectators;
+
+    private double ticketEarning;
 }

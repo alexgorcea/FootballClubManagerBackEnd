@@ -32,8 +32,8 @@ public class ReviewService {
     }
 
     public Review createReview(Review review, String matchId){
-        String winnerTeam = calculateWinningTeam(review, matchId);
-        review.setWinnerTeamId(winnerTeam);
+        review.setWinnerTeamId(calculateWinningTeam(review, matchId));
+        review.setTicketEarning(calculateTicketEarning(review, matchId));
 
         Review savedReview = reviewsRepository.save(review);
 
@@ -52,6 +52,7 @@ public class ReviewService {
         String matchId = mongoTemplate.findOne(query,Match.class).getMatchId();
 
         updatedReview.setWinnerTeamId(calculateWinningTeam(updatedReview, matchId));
+        updatedReview.setTicketEarning(calculateTicketEarning(updatedReview, matchId));
 
         return reviewsRepository.save(updatedReview);
     }
@@ -75,6 +76,12 @@ public class ReviewService {
         }
 
         return "Draw";
+    }
+
+    private double calculateTicketEarning(Review review, String matchId){
+        int ticketPrice = mongoTemplate.findById(matchId, Match.class).getTicketPrice();
+        double spectators = review.getSpectators();
+        return ticketPrice * spectators;
     }
 
 }
