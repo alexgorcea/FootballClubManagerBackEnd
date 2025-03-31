@@ -57,6 +57,10 @@ public class ReviewService {
     }
 
     public void removeReview(String reviewId){
+        Query query = new Query(Criteria.where("reviewId").is(reviewId));
+        Update update = new Update().set("reviewId",null);
+        mongoTemplate.updateFirst(query, update, Match.class);
+
         reviewsRepository.deleteByReviewId(reviewId);
     }
 
