@@ -78,10 +78,26 @@ public class ReviewService {
         return "Draw";
     }
 
-    private double calculateTicketEarning(Review review, String matchId){
-        int ticketPrice = mongoTemplate.findById(matchId, Match.class).getTicketPrice();
-        double spectators = review.getSpectators();
-        return ticketPrice * spectators;
+    private Review.TicketEarning calculateTicketEarning(Review review, String matchId){
+        Match.TicketPrice ticketPrice = mongoTemplate.findById(matchId, Match.class).getTicketPrices();
+        Review.Spectators spectators = review.getSpectators();
+
+        double northSeatsEarning = ticketPrice.getNorthSeats() * spectators.getNorthSeats();
+        double eastSeatsEarning = ticketPrice.getEastSeats() * spectators.getEastSeats();
+        double southSeatsEarning = ticketPrice.getSouthSeats() * spectators.getSouthSeats();
+        double westSeatsEarning = ticketPrice.getWestSeats() * spectators.getWestSeats();
+        double vipSeatsEarning = ticketPrice.getVipSeats() * spectators.getVipSeats();
+
+        Review.TicketEarning ticketEarning = new Review.TicketEarning();
+
+        ticketEarning.setNorthSeatsEarning(northSeatsEarning);
+        ticketEarning.setEastSeatsEarning(eastSeatsEarning);
+        ticketEarning.setSouthSeatsEarning(southSeatsEarning);
+        ticketEarning.setWestSeatsEarning(westSeatsEarning);
+        ticketEarning.setVipSeatsEarning(vipSeatsEarning);
+
+        return ticketEarning;
+
     }
 
 }

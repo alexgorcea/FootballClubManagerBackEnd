@@ -22,7 +22,29 @@ public class Review {
 
     private String winnerTeamId;
 
-    private double spectators;
+    private Spectators spectators;
 
-    private double ticketEarning;
+    private TicketEarning ticketEarning;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Spectators{
+        private double northSeats;
+        private double eastSeats;
+        private double southSeats;
+        private double westSeats;
+        private double vipSeats;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TicketEarning{
+        private double northSeatsEarning;
+        private double eastSeatsEarning;
+        private double southSeatsEarning;
+        private double westSeatsEarning;
+        private double vipSeatsEarning;
+    }
 }

@@ -27,8 +27,19 @@ public class Match {
 
     private double prize;
 
-    private int ticketPrice;
+    private TicketPrice ticketPrices;
 
     private String reviewId;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TicketPrice{
+        private int northSeats;
+        private int eastSeats;
+        private int southSeats;
+        private int westSeats;
+        private int vipSeats;
+    }
 
 }
