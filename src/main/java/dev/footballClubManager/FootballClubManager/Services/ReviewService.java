@@ -52,7 +52,6 @@ public class ReviewService {
         String matchId = mongoTemplate.findOne(query,Match.class).getMatchId();
 
         updatedReview.setWinnerTeamId(calculateWinningTeam(updatedReview, matchId));
-        updatedReview.setTicketEarning(calculateTicketEarning(updatedReview, matchId));
 
         return reviewsRepository.save(updatedReview);
     }
@@ -80,13 +79,21 @@ public class ReviewService {
 
     private Review.TicketEarning calculateTicketEarning(Review review, String matchId){
         Match.TicketPrice ticketPrice = mongoTemplate.findById(matchId, Match.class).getTicketPrices();
-        Review.Spectators spectators = review.getSpectators();
+        Match.TicketsSold ticketsSold = mongoTemplate.findById(matchId, Match.class).getTicketsSold();
+        Review.Spectators spectatorsToSet = new Review.Spectators(
+                ticketsSold.getNorthSeats(),
+                ticketsSold.getEastSeats(),
+                ticketsSold.getSouthSeats(),
+                ticketsSold.getWestSeats(),
+                ticketsSold.getVipSeats()
+        );
+        review.setSpectators(spectatorsToSet);
 
-        double northSeatsEarning = ticketPrice.getNorthSeats() * spectators.getNorthSeats();
-        double eastSeatsEarning = ticketPrice.getEastSeats() * spectators.getEastSeats();
-        double southSeatsEarning = ticketPrice.getSouthSeats() * spectators.getSouthSeats();
-        double westSeatsEarning = ticketPrice.getWestSeats() * spectators.getWestSeats();
-        double vipSeatsEarning = ticketPrice.getVipSeats() * spectators.getVipSeats();
+        double northSeatsEarning = ticketPrice.getNorthSeats() * review.getSpectators().getNorthSeats();
+        double eastSeatsEarning = ticketPrice.getEastSeats() * review.getSpectators().getEastSeats();
+        double southSeatsEarning = ticketPrice.getSouthSeats() * review.getSpectators().getSouthSeats();
+        double westSeatsEarning = ticketPrice.getWestSeats() * review.getSpectators().getWestSeats();
+        double vipSeatsEarning = ticketPrice.getVipSeats() * review.getSpectators().getVipSeats();
 
         Review.TicketEarning ticketEarning = new Review.TicketEarning();
 
