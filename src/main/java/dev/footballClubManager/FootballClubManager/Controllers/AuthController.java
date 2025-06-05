@@ -25,7 +25,13 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Principal principal) {
-        return ResponseEntity.ok(Map.of("username", principal.getName()));
+        User user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(Map.of(
+                "username", user.getUsername(),
+                "roles", user.getRoles().stream().map(Role::name).toList()
+        ));
     }
 
 
