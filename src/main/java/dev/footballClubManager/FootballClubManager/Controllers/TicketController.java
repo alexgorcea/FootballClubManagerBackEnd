@@ -106,6 +106,32 @@ public class TicketController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        Optional<Match> optionalMatch = matchRepository.findById(ticket.getMatchId());
+        if (optionalMatch.isPresent()) {
+            Match match = optionalMatch.get();
+            Match.TicketsSold sold = match.getTicketsSold();
+            if (sold != null) {
+                String tribune = ticket.getSeat().toLowerCase();
+                int quantity = ticket.getQuantity();
+
+                switch (tribune) {
+                    case "north":
+                        sold.setNorthSeats(sold.getNorthSeats() - quantity); break;
+                    case "south":
+                        sold.setSouthSeats(sold.getSouthSeats() - quantity); break;
+                    case "east":
+                        sold.setEastSeats(sold.getEastSeats() - quantity); break;
+                    case "west":
+                        sold.setWestSeats(sold.getWestSeats() - quantity); break;
+                    case "vip":
+                        sold.setVipSeats(sold.getVipSeats() - quantity); break;
+                }
+
+                match.setTicketsSold(sold);
+                matchRepository.save(match);
+            }
+        }
+
         User user = optionalUser.get();
         if (!ticket.getUserId().equals(user.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
