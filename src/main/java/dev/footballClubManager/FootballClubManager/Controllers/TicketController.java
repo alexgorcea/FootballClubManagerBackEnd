@@ -1,151 +1,60 @@
 package dev.footballClubManager.FootballClubManager.Controllers;
 
-import dev.footballClubManager.FootballClubManager.Models.Match;
-import dev.footballClubManager.FootballClubManager.Models.Team;
 import dev.footballClubManager.FootballClubManager.Models.Ticket;
-import dev.footballClubManager.FootballClubManager.Models.User;
 import dev.footballClubManager.FootballClubManager.Repositories.MatchRepository;
-import dev.footballClubManager.FootballClubManager.Repositories.TeamRepository;
 import dev.footballClubManager.FootballClubManager.Repositories.TicketRepository;
 import dev.footballClubManager.FootballClubManager.Repositories.UserRepository;
+import dev.footballClubManager.FootballClubManager.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketController {
 
     @Autowired
-    private TicketRepository ticketRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MatchRepository matchRepository;
-
-    @Autowired
-    private TeamRepository teamRepository;
+    private TicketService ticketService;
 
 
     @PostMapping("/buy")
-    public ResponseEntity<Ticket> buyTicket(@RequestBody Ticket ticket, Principal principal) {
-        Optional<User> optionalUser = userRepository.findByUsername(principal.getName());
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<?> buyTicket(@RequestBody Ticket ticket, Principal principal) {
+        try {
+            Ticket result = ticketService.prepareToBuyTicket(ticket, principal);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
-        User user = optionalUser.get();
-
-        Optional<Match> optionalMatch = matchRepository.findById(ticket.getMatchId());
-        if (optionalMatch.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Match match = optionalMatch.get();
-
-        Optional<Team> homeTeamOpt = teamRepository.findTeamById(match.getHomeTeamId());
-        Optional<Team> awayTeamOpt = teamRepository.findTeamById(match.getAwayTeamId());
-
-        if (homeTeamOpt.isEmpty() || awayTeamOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        String matchTitle = homeTeamOpt.get().getName() + " vs " + awayTeamOpt.get().getName();
-
-        ticket.setUserId(user.getId());
-        ticket.setMatchTitle(matchTitle);
-        Ticket saved = ticketRepository.save(ticket);
-
-        if (user.getTicketIds() == null) {
-            user.setTicketIds(new ArrayList<>());
-        }
-        user.getTicketIds().add(saved.getId());
-        userRepository.save(user);
-
-        return ResponseEntity.ok(saved);
     }
 
 
     @GetMapping("/my")
-    public ResponseEntity<List<Ticket>> getMyTickets(Principal principal) {
-        Optional<User> optionalUser = userRepository.findByUsername(principal.getName());
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<?> getMyTickets(Principal principal) {
+        try {
+            List<Ticket> tickets = ticketService.getTickets(principal);
+            return ResponseEntity.ok(tickets);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
-
-        User user = optionalUser.get();
-        List<String> ticketIds = user.getTicketIds();
-
-        if (ticketIds == null || ticketIds.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
-        }
-
-        List<Ticket> tickets = ticketRepository.findAllById(ticketIds);
-        return ResponseEntity.ok(tickets);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTicket(@PathVariable String id, Principal principal) {
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if (optionalTicket.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Ticket ticket = optionalTicket.get();
-
-        Optional<User> optionalUser = userRepository.findByUsername(principal.getName());
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Match> optionalMatch = matchRepository.findById(ticket.getMatchId());
-        if (optionalMatch.isPresent()) {
-            Match match = optionalMatch.get();
-            Match.TicketsSold sold = match.getTicketsSold();
-            if (sold != null) {
-                String tribune = ticket.getSeat().toLowerCase();
-                int quantity = ticket.getQuantity();
-
-                switch (tribune) {
-                    case "north":
-                        sold.setNorthSeats(sold.getNorthSeats() - quantity); break;
-                    case "south":
-                        sold.setSouthSeats(sold.getSouthSeats() - quantity); break;
-                    case "east":
-                        sold.setEastSeats(sold.getEastSeats() - quantity); break;
-                    case "west":
-                        sold.setWestSeats(sold.getWestSeats() - quantity); break;
-                    case "vip":
-                        sold.setVipSeats(sold.getVipSeats() - quantity); break;
-                }
-
-                match.setTicketsSold(sold);
-                matchRepository.save(match);
+        try {
+            ticketService.removeTicket(id, principal);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            if (e instanceof SecurityException) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", e.getMessage()));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
             }
         }
-
-        User user = optionalUser.get();
-        if (!ticket.getUserId().equals(user.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        ticketRepository.deleteById(id);
-
-        if (user.getTicketIds() != null) {
-            user.getTicketIds().remove(id);
-            userRepository.save(user);
-        }
-
-        return ResponseEntity.ok().build();
     }
-
 }
 
